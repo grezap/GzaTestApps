@@ -1,0 +1,27 @@
+﻿<Window x:Class="WpfApplicationTestMvvmOne.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplicationTestMvvmOne"
+        xmlns:custns="clr-namespace:WpfApplicationTestMvvmOne.ViewModels"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+
+    <Window.Resources>
+        <custns:CustomerViewModel x:Key="custviewobj" TxtCustomerName="Greg" TxtAmount="1000" IsMarried="True"></custns:CustomerViewModel>
+    </Window.Resources>
+    <Grid>
+        <Label Content="Customer Name" HorizontalAlignment="Left" Margin="26,15,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblName" Margin="142,15,336,273" Content="{Binding TxtCustomerName, Source={StaticResource custviewobj}}" />
+        <Label Content="Sales Amount" HorizontalAlignment="Left" Margin="26,51,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblAmount" Margin="142,51,338,244" Content="{Binding TxtAmount, Source={StaticResource custviewobj}}" />
+        <Label Content="Buying Habits" HorizontalAlignment="Left" Margin="26,80,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblBuyingHabits" Content="" HorizontalAlignment="Left" Margin="142,80,0,0" VerticalAlignment="Top" Background="{Binding LblAmountColor, Mode=OneWay, Source={StaticResource custviewobj}}" Width="83"/>
+        <Label Content="Married" HorizontalAlignment="Left" Margin="26,111,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.022,0.478"/>
+        <CheckBox x:Name="chkMarried" Margin="142,119,358,184" IsChecked="{Binding IsMarried, Source={StaticResource custviewobj}}"/>
+        <Label Content="Tax" HorizontalAlignment="Left" Margin="26,137,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.022,0.478"/>
+        <Label x:Name="lblTax" HorizontalAlignment="Left" Margin="142,140,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.022,0.478" Width="83" Height="23"/>
+
+    </Grid>
+</Window>
