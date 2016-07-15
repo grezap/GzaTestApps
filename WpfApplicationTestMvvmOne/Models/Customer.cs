@@ -38,6 +38,18 @@ namespace WpfApplicationTestMvvmOne.Models
             else { _tax = 5; }
         }
 
+        public bool IsValid()
+        {
+            if (_amount == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         #endregion
     }
 }

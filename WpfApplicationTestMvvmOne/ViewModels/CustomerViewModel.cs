@@ -1,15 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using WpfApplicationTestMvvmOne.Actions;
 using WpfApplicationTestMvvmOne.Models;
 
 namespace WpfApplicationTestMvvmOne.ViewModels
 {
-    public class CustomerViewModel
+    public class CustomerViewModel : INotifyPropertyChanged
     {
         private Customer cust = new Customer();
+
+        private ButtonCommand objCommand;
+
+        public CustomerViewModel()
+        {
+            objCommand = new ButtonCommand(CalculateTax, cust.IsValid);
+        }
+
+        public ICommand btnClick
+        {
+            get { return objCommand; }
+        }
 
         public String TxtCustomerName
         {
@@ -21,6 +36,12 @@ namespace WpfApplicationTestMvvmOne.ViewModels
         {
             get { return Convert.ToString(cust.Amount); }
             set { cust.Amount = Convert.ToDouble(value); }
+        }
+
+        public String TaxAmount
+        {
+            get { return Convert.ToString(cust.Tax); }
+            set { cust.Tax = Convert.ToDouble(value); }
         }
 
         public String LblAmountColor
@@ -55,6 +76,14 @@ namespace WpfApplicationTestMvvmOne.ViewModels
             }
         }
 
-        public void CalculateTax() { cust.CalculateTax(); }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void CalculateTax()
+        {
+            cust.CalculateTax();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TaxAmount"));
+        }
+
+
     }
 }

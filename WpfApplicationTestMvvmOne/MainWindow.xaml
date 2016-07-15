@@ -9,19 +9,20 @@
         Title="MainWindow" Height="350" Width="525">
 
     <Window.Resources>
-        <custns:CustomerViewModel x:Key="custviewobj" TxtCustomerName="Greg" TxtAmount="1000" IsMarried="True"></custns:CustomerViewModel>
+        <custns:CustomerViewModel x:Key="custviewobj" TxtCustomerName="Greg" TxtAmount="3000" IsMarried="True"></custns:CustomerViewModel>
     </Window.Resources>
     <Grid>
         <Label Content="Customer Name" HorizontalAlignment="Left" Margin="26,15,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblName" Margin="142,15,336,273" Content="{Binding TxtCustomerName, Source={StaticResource custviewobj}}" />
-        <Label Content="Sales Amount" HorizontalAlignment="Left" Margin="26,51,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblAmount" Margin="142,51,338,244" Content="{Binding TxtAmount, Source={StaticResource custviewobj}}" />
-        <Label Content="Buying Habits" HorizontalAlignment="Left" Margin="26,80,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblBuyingHabits" Content="" HorizontalAlignment="Left" Margin="142,80,0,0" VerticalAlignment="Top" Background="{Binding LblAmountColor, Mode=OneWay, Source={StaticResource custviewobj}}" Width="83"/>
-        <Label Content="Married" HorizontalAlignment="Left" Margin="26,111,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.022,0.478"/>
-        <CheckBox x:Name="chkMarried" Margin="142,119,358,184" IsChecked="{Binding IsMarried, Source={StaticResource custviewobj}}"/>
-        <Label Content="Tax" HorizontalAlignment="Left" Margin="26,137,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.022,0.478"/>
-        <Label x:Name="lblTax" HorizontalAlignment="Left" Margin="142,140,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.022,0.478" Width="83" Height="23"/>
+        <Label x:Name="lblName" Margin="142,15,292,269" Content="{Binding TxtCustomerName, Source={StaticResource custviewobj}}" />
+        <Label Content="Sales Amount" HorizontalAlignment="Left" Margin="26,68,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblAmount" Margin="142,68,299,216" Content="{Binding TxtAmount, Source={StaticResource custviewobj}}" />
+        <Label Content="Buying Habits" HorizontalAlignment="Left" Margin="26,120,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblBuyingHabits" Content="" HorizontalAlignment="Left" Margin="142,120,0,0" VerticalAlignment="Top" Background="{Binding LblAmountColor, Mode=OneWay, Source={StaticResource custviewobj}}" Width="83" Height="40"/>
+        <Label Content="Married" HorizontalAlignment="Left" Margin="26,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.022,0.478"/>
+        <CheckBox x:Name="chkMarried" Margin="142,182,358,121" IsChecked="{Binding IsMarried, Source={StaticResource custviewobj}}"/>
+        <Label Content="Tax" HorizontalAlignment="Left" Margin="26,222,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.022,0.478"/>
+        <Label x:Name="lblTax" HorizontalAlignment="Left" Margin="142,225,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.022,0.478" Width="83" Height="35" Content="{Binding TaxAmount, Source={StaticResource custviewobj}}"/>
+        <Button x:Name="button" Content="Calculate Tax" HorizontalAlignment="Left" Margin="122,279,0,0" VerticalAlignment="Top" Width="195" Command="{Binding btnClick, Mode=OneWay, Source={StaticResource custviewobj}}"/>
 
     </Grid>
 </Window>
