@@ -15,7 +15,7 @@ namespace StarRocksClient.Core
     {
         #region Fields
         private readonly string _CONN_STR_ = "Server=192.168.203.8;Database=testdb;Port=9030;Uid=root;Pwd=tzimakos;";
-        private static IDbConnection _conn;
+        private MySqlConnection _conn;
         #endregion
 
         public StarRocksCore()
@@ -50,10 +50,18 @@ namespace StarRocksClient.Core
         private int InsertItem(TestItem testItem) 
         {
             string sql = "INSERT INTO testitem (Id, Name, OrderDate, ItemPrice, ItemInStock, ItemWarehouse, ItemRevenue, ItemQuantity) " +
-                         $"select {testItem.Id}, '{testItem.Name}', '{testItem.OrderDate}', {testItem.ItemPrice}, {(testItem.ItemInStock?"1":"0")}, " +
-                         $"'{testItem.ItemWarehouse}', {testItem.ItemRevenue}, {testItem.ItemQuantity};";
-            var res = _conn.Execute(sql);
-            return res;
+                         $"values ({testItem.Id}, '{testItem.Name}', '{testItem.OrderDate}', {testItem.ItemPrice}, {(testItem.ItemInStock?"1":"0")}, " +
+                         $"'{testItem.ItemWarehouse}', {testItem.ItemRevenue}, {testItem.ItemQuantity});";
+
+            using (MySqlCommand cmd = new MySqlCommand(sql, _conn))
+            {
+                _conn.Open();
+                var res = cmd.ExecuteNonQuery();
+                _conn.Close();
+                return res;
+            };
+            
+            
         }
     }
 }
