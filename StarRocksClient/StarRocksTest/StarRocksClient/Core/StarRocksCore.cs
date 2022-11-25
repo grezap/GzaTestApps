@@ -15,20 +15,21 @@ namespace StarRocksClient.Core
     {
         #region Fields
         private readonly string _CONN_STR_ = "Server=192.168.203.8;Database=testdb;Port=9030;Uid=root;Pwd=tzimakos;";
-        private MySqlConnection _conn;
         #endregion
 
         public StarRocksCore()
         {
-            _conn = new MySqlConnection(_CONN_STR_);
         }
 
         public void Start() 
         {
-            int id = 3;
+
+            //SimpleSelect();
+            //SimpleInsert();
+            int id = 5;
             var testitem = GetTestItemById(id);
             if (testitem == null)
-            { 
+            {
                 Console.WriteLine($"No Item with id: {id} exists");
                 testitem = new TestItem(id);
                 var res = InsertItem(testitem);
@@ -42,26 +43,92 @@ namespace StarRocksClient.Core
 
         private TestItem? GetTestItemById(int id) 
         {
+            TestItem? testItem;
             object parms = new { key = id };
-            var testitem = _conn.QueryFirstOrDefault<TestItem>("select * from testitem where Id = @key;",parms);
-            return testitem;
+
+            try
+            {
+                using (var conn = new MySqlConnection(_CONN_STR_))
+                {
+                    testItem = conn.Query<TestItem>("select * from testitem where item_id = @key;", parms).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                throw;
+            }
+            
+            return testItem;
+        }
+
+        private void SimpleSelect() 
+        {
+            try
+            {
+                string sql = $"select item_id as Id, item_name as Name From testitem where item_id = 1";
+                using (var conn = new MySqlConnection(_CONN_STR_))
+                {
+                    var res = conn.Query<TestItem>(sql);
+                    if (res != null) 
+                    {
+                        Console.WriteLine($"Found Item With Id: {res.First().Id}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                throw;
+            }
         }
 
         private int InsertItem(TestItem testItem) 
         {
-            string sql = "INSERT INTO testitem (Id, Name, OrderDate, ItemPrice, ItemInStock, ItemWarehouse, ItemRevenue, ItemQuantity) " +
+            //(Id, Name, OrderDate, ItemPrice, ItemInStock, ItemWarehouse, ItemRevenue, ItemQuantity)
+            string sql = "INSERT INTO testitem " +
                          $"values ({testItem.Id}, '{testItem.Name}', '{testItem.OrderDate}', {testItem.ItemPrice}, {(testItem.ItemInStock?"1":"0")}, " +
                          $"'{testItem.ItemWarehouse}', {testItem.ItemRevenue}, {testItem.ItemQuantity});";
 
-            using (MySqlCommand cmd = new MySqlCommand(sql, _conn))
+            Console.WriteLine($"SQL Statement is: {sql}");
+
+            try
             {
-                _conn.Open();
-                var res = cmd.ExecuteNonQuery();
-                _conn.Close();
-                return res;
-            };
+                using (var conn = new MySqlConnection(_CONN_STR_))
+                {
+                    var res = conn.Execute(sql);
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                throw;
+            }
             
             
+        }
+
+        private void SimpleInsert() 
+        {
+            string sql = "insert into testsimple (simple_key,simple_name, simple_date, simple_double,simple_tinyint,simple_nametwo,simple_doubletwo,simple_int) " +
+                "values (3,'test2','2022-11-25 10:11:12',0.5,1,'test2',2,3)";
+            try
+            {
+                using (var conn = new MySqlConnection(_CONN_STR_))
+                {
+                    conn.Execute(sql);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                throw;
+            }
         }
     }
 }
