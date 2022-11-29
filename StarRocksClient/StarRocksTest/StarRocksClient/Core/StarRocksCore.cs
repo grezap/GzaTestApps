@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using StarRocksClient.Models;
 using System;
@@ -14,14 +15,48 @@ namespace StarRocksClient.Core
     public class StarRocksCore
     {
         #region Fields
-        private readonly string _CONN_STR_ = "Server=192.168.203.8;Database=testdb;Port=9030;Uid=root;Pwd=tzimakos;";
+        private static IConfiguration _config;
         #endregion
 
-        public StarRocksCore()
+        #region Constructor
+        public StarRocksCore(IConfiguration configuration)
         {
+            _config = configuration;
+        }
+        #endregion
+
+        #region Methods
+        public void CustomerGenerator()
+        {
+
         }
 
-        public void Start() 
+        public void SupplierGenerator()
+        {
+
+        }
+
+        public void ProductGenerator()
+        {
+
+        }
+
+        public void ProductToSupplierGenerator()
+        {
+
+        }
+
+        public void OrderGenerator()
+        {
+
+        }
+
+        public void OrderItemGenerator()
+        {
+
+        }
+
+        public void Start()
         {
 
             //SimpleSelect();
@@ -41,7 +76,7 @@ namespace StarRocksClient.Core
             }
         }
 
-        private TestItem? GetTestItemById(int id) 
+        private TestItem? GetTestItemById(int id)
         {
             TestItem? testItem;
             object parms = new { key = id };
@@ -59,11 +94,11 @@ namespace StarRocksClient.Core
                 Console.WriteLine(ex.StackTrace);
                 throw;
             }
-            
+
             return testItem;
         }
 
-        private void SimpleSelect() 
+        private void SimpleSelect()
         {
             try
             {
@@ -71,7 +106,7 @@ namespace StarRocksClient.Core
                 using (var conn = new MySqlConnection(_CONN_STR_))
                 {
                     var res = conn.Query<TestItem>(sql);
-                    if (res != null) 
+                    if (res != null)
                     {
                         Console.WriteLine($"Found Item With Id: {res.First().Id}");
                     }
@@ -85,11 +120,11 @@ namespace StarRocksClient.Core
             }
         }
 
-        private int InsertItem(TestItem testItem) 
+        private int InsertItem(TestItem testItem)
         {
             //(Id, Name, OrderDate, ItemPrice, ItemInStock, ItemWarehouse, ItemRevenue, ItemQuantity)
             string sql = "INSERT INTO testitem " +
-                         $"values ({testItem.Id}, '{testItem.Name}', '{testItem.OrderDate}', {testItem.ItemPrice}, {(testItem.ItemInStock?"1":"0")}, " +
+                         $"values ({testItem.Id}, '{testItem.Name}', '{testItem.OrderDate}', {testItem.ItemPrice}, {(testItem.ItemInStock ? "1" : "0")}, " +
                          $"'{testItem.ItemWarehouse}', {testItem.ItemRevenue}, {testItem.ItemQuantity});";
 
             Console.WriteLine($"SQL Statement is: {sql}");
@@ -108,11 +143,11 @@ namespace StarRocksClient.Core
                 Console.WriteLine(ex.StackTrace);
                 throw;
             }
-            
-            
+
+
         }
 
-        private void SimpleInsert() 
+        private void SimpleInsert()
         {
             string sql = "insert into testsimple (simple_key,simple_name, simple_date, simple_double,simple_tinyint,simple_nametwo,simple_doubletwo,simple_int) " +
                 "values (3,'test2','2022-11-25 10:11:12',0.5,1,'test2',2,3)";
@@ -129,6 +164,7 @@ namespace StarRocksClient.Core
                 Console.WriteLine(ex.StackTrace);
                 throw;
             }
-        }
+        } 
+        #endregion
     }
 }
