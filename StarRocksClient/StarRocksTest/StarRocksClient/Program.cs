@@ -2,6 +2,8 @@
 using StarRocksClient.Core;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
+using StarRocksClient.CommandLineOptions;
+using CommandLine;
 
 internal class Program
 {
@@ -18,10 +20,30 @@ internal class Program
 
         _configuration = builder.Build();
 
+        ClientOptionHandler handler = new ClientOptionHandler(_configuration);
+        try
+        {
+            var res = Parser.Default
+            .ParseArguments<ClientOption>(args)
+            .WithParsed<ClientOption>(opts => handler.HandleOptions(opts))
+            ;
 
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Could Not Parse The Arguments Provided. Exiting Application. {ex.Message}");
+        }
+        //StarRocksCore core = new StarRocksCore();
+        //core.Start();
+        //Console.ReadLine();
+    }
 
-        StarRocksCore core = new StarRocksCore();
-        core.Start();
-        Console.ReadLine();
+    private static void ErrorsHandler(IEnumerable<Error> errors)
+    {
+        foreach (var err in errors)
+        {
+            Console.WriteLine($"Error: {err.Tag.ToString()}");
+            //Log.Information($"Error: {err.Tag.ToString()}");
+        }
     }
 }

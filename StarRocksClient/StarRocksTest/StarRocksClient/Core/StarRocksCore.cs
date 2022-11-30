@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using StarRocksClient.CommandLineOptions;
 using StarRocksClient.Models;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,18 @@ namespace StarRocksClient.Core
     {
         #region Fields
         private static IConfiguration _config;
+        private int _customerRows;
+        private int _orderRows;
+        private int _orderItemRows;
         #endregion
 
         #region Constructor
-        public StarRocksCore(IConfiguration configuration)
+        public StarRocksCore(IConfiguration configuration, ClientOption option)
         {
             _config = configuration;
+            _customerRows = option.RowsNumber;
+            _orderRows = Convert.ToInt32(_config.GetSection("Generator").GetSection("OrderRows").Value);
+            _orderItemRows = Convert.ToInt32(_config.GetSection("Generator").GetSection("OrderItemRows").Value);
         }
         #endregion
 
