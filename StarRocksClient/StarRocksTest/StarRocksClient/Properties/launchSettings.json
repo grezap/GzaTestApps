@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "StarRocksClient": {
+      "commandName": "Project",
+      "commandLineArgs": "Generate --model Customer --rowsNumber 100"
+    }
+  }
+}

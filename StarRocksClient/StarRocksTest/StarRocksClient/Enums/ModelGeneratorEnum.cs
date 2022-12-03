@@ -5,7 +5,7 @@
         Customer = 1,
         Order,
         Product,
-        OrderItem,
+        Lineitem,
         Supplier
     }
 }

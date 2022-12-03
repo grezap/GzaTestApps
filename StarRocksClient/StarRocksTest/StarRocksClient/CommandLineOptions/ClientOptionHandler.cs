@@ -1,10 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using StarRocksClient.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StarRocksClient.CommandLineOptions
 {
@@ -24,9 +19,33 @@ namespace StarRocksClient.CommandLineOptions
         #region Methods
         public void HandleOptions(ClientOption options) 
         {
-            StarRocksCore core = new StarRocksCore(_config);
+            StarRocksCore core = new StarRocksCore(_config, options);
 
-
+            if (options.GenerateAll)
+            {
+                core.AllGenerator();
+                return;
+            }
+            if (options.Model == Enums.ModelGeneratorEnum.Customer)
+            {
+                core.CustomerGeneration();
+            }
+            if (options.Model == Enums.ModelGeneratorEnum.Product)
+            {
+                core.ProductGeneration();
+            }
+            if (options.Model == Enums.ModelGeneratorEnum.Order)
+            {
+                core.OrderGeneration();
+            }
+            if (options.Model == Enums.ModelGeneratorEnum.Supplier)
+            {
+                core.SupplierGeneration();
+            }
+            if (options.Model == Enums.ModelGeneratorEnum.Lineitem)
+            {
+                core.OrderItemGeneration();
+            }
         }
         #endregion
     }
